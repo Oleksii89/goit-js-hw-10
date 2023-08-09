@@ -8,8 +8,5 @@ function fetchBreeds() {
     return resp.json();
   });
 }
-fetchBreeds()
-  .then(data => console.log(data))
-  .catch(err => console.log(err));
 
 export { fetchBreeds };
