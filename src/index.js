@@ -21,7 +21,7 @@ refs.select.addEventListener('change', onSelectBreed);
 function onSelectBreed(event) {
   const breedId = event.currentTarget.value;
   fetchCatByBreed(breedId)
-    .then(data => console.log(data))
+    .then(data => createMarkup(data))
     .catch(err => console.log(err));
 }
 
@@ -34,7 +34,8 @@ function createList(arr) {
 function createMarkup(data) {
   const card = data
     .map(el => {
-      return `<li><img src="" alt="" width="" height="" /><h2></h2><p></p><h3>Temperament</h3><p></p></li>`;
+      return `<li><img src="${el.url}" alt="${el.breeds[0].name}" width="400"/><h2>${el.breeds[0].name}</h2><p>${el.breeds[0].description}</p><h3>Temperament</h3><p>${el.breeds[0].temperament}</p></li>`;
     })
     .join('');
+  refs.catInfo.innerHTML = card;
 }
