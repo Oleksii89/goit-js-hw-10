@@ -1,28 +1,57 @@
 import axios from 'axios';
+import './styles.css';
+import SlimSelect from 'slim-select';
+import '/node_modules/slim-select/dist/slimselect.css';
+import Notiflix from 'notiflix';
 
 axios.defaults.headers.common['x-api-key'] =
   'live_6pSKRboySWbbUVzhZK0GmvcHpXjZ2jwlVVY9nclqHJFk4LaUET5TjmfpBsT9kKPP';
 
-import { fetchBreeds } from './cat-api';
-import { fetchCatByBreed } from './cat-api';
+import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
 const refs = {
   select: document.querySelector('.breed-select'),
   catInfo: document.querySelector('.cat-info'),
+  loader: document.querySelector('.loader'),
+  error: document.querySelector('.error'),
 };
+function slim() {
+  new SlimSelect({
+    select: refs.select,
+  });
+}
+
+// refs.loader.classList.replace('loader', 'is-hidden');
+refs.error.classList.add('is-hidden');
+refs.catInfo.classList.add('is-hidden');
+refs.select.classList.add('is-hidden');
 
 fetchBreeds()
   .then(data => {
     refs.select.innerHTML = createList(data);
+    slim();
+    refs.select.classList.remove('is-hidden');
+    refs.loader.classList.replace('loader', 'is-hidden');
   })
-  .catch(err => console.log(err));
+  .catch(onFetchError);
 
 refs.select.addEventListener('change', onSelectBreed);
+
 function onSelectBreed(event) {
+  refs.loader.classList.replace('is-hidden', 'loader');
+  refs.select.classList.add('is-hidden');
+  refs.catInfo.classList.add('is-hidden');
   const breedId = event.currentTarget.value;
+
   fetchCatByBreed(breedId)
-    .then(data => createMarkup(data))
-    .catch(err => console.log(err));
+    .then(data => {
+      refs.loader.classList.replace('loader', 'is-hidden');
+      refs.select.classList.remove('is-hidden');
+      createMarkup(data);
+
+      refs.catInfo.classList.remove('is-hidden');
+    })
+    .catch(onFetchError);
 }
 
 function createList(arr) {
@@ -38,4 +67,19 @@ function createMarkup(data) {
     })
     .join('');
   refs.catInfo.innerHTML = card;
+}
+
+function onFetchError(error) {
+  refs.select.classList.remove('is-hidden');
+  refs.loader.classList.replace('loader', 'is-hidden');
+
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page or select another cat breed!',
+    {
+      position: 'center-center',
+      timeout: 5000,
+      width: '400px',
+      fontSize: '24px',
+    }
+  );
 }

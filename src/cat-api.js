@@ -25,5 +25,4 @@ function fetchCatByBreed(breedId) {
   );
 }
 
-export { fetchBreeds };
-export { fetchCatByBreed };
+export { fetchBreeds, fetchCatByBreed };
