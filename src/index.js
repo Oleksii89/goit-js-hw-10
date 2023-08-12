@@ -14,6 +14,12 @@ const refs = {
 function slim() {
   new SlimSelect({
     select: refs.select,
+    settings: {
+      showSearch: false,
+      searchText: 'Sorry nothing to see here',
+      searchPlaceholder: 'Search for the good stuff!',
+      searchHighlight: true,
+    },
   });
 }
 
@@ -69,6 +75,7 @@ function onFetchError(error) {
   refs.select.classList.remove('is-hidden');
   refs.loader.classList.replace('loader', 'is-hidden');
   console.log(error);
+  refs.catInfo.innerHTML = '';
 
   Notiflix.Notify.failure(
     'Oops! Something went wrong! Try reloading the page or select another cat breed!',
