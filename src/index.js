@@ -1,11 +1,7 @@
-import axios from 'axios';
 import './styles.css';
 import SlimSelect from 'slim-select';
 import '/node_modules/slim-select/dist/slimselect.css';
 import Notiflix from 'notiflix';
-
-axios.defaults.headers.common['x-api-key'] =
-  'live_6pSKRboySWbbUVzhZK0GmvcHpXjZ2jwlVVY9nclqHJFk4LaUET5TjmfpBsT9kKPP';
 
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
@@ -72,6 +68,7 @@ function createMarkup(data) {
 function onFetchError(error) {
   refs.select.classList.remove('is-hidden');
   refs.loader.classList.replace('loader', 'is-hidden');
+  console.log(error);
 
   Notiflix.Notify.failure(
     'Oops! Something went wrong! Try reloading the page or select another cat breed!',
